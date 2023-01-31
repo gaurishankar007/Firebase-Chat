@@ -1,11 +1,11 @@
-import 'package:firebase_chat/firebase_options.dart';
-import 'package:firebase_chat/src/config/routes/route.dart';
-import 'package:firebase_chat/src/config/themes/theme.dart';
-import 'package:firebase_chat/src/data/local/local_data.dart';
-import 'package:firebase_chat/src/presentation/blocs/theme/theme_bloc.dart';
+import 'firebase_options.dart';
+import 'src/config/routes/route.dart';
+import 'src/config/themes/theme.dart';
+import 'src/data/local/local_data.dart';
+import 'src/presentation/blocs/theme/theme_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; 
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await LocalData.setInstance();
+  await LocalData.init();
 
   runApp(FirebaseChat());
 }
@@ -34,7 +34,7 @@ class FirebaseChat extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: state.themeMode,
-            initialRoute: LocalData.initialRoute,
+            initialRoute: LocalData.initialRoute(),
             onGenerateRoute: AppRoutes.onGenerated,
           );
         },

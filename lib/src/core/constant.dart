@@ -67,3 +67,8 @@ TextStyle largeBoldText = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w600,
 );
+
+TextStyle veryLargeText = TextStyle(
+  fontSize: 24,
+  fontWeight: FontWeight.w500,
+);

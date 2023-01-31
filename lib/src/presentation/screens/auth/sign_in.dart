@@ -1,19 +1,11 @@
-import 'dart:convert';
-
-import 'package:firebase_chat/src/core/constant.dart';
-import 'package:firebase_chat/src/data/remote/repositories/firebase_repo_impl.dart';
 import 'package:flutter/material.dart';
 
-import '../../../data/remote/models/google_user_model.dart';
+import '../../../core/constant.dart';
+import '../../../data/remote/repositories/firebase_repo_impl.dart';
 
-class SignIn extends StatefulWidget {
+class SignIn extends StatelessWidget {
   const SignIn({super.key});
 
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
@@ -73,7 +65,8 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => FirebaseRepoImpl().googleSignIn(),
+                    onPressed: () =>
+                        FirebaseAuthRepoImpl().googleSignIn(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary,
                       foregroundColor: onPrimary,

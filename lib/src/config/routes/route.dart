@@ -1,18 +1,23 @@
-import 'package:firebase_chat/src/presentation/screens/auth/sign_in.dart';
-import 'package:firebase_chat/src/presentation/screens/welcome.dart';
+import 'package:firebase_chat/src/presentation/screens/home.dart';
+
+import '../../presentation/screens/auth/sign_in.dart';
+import '../../presentation/screens/auth/welcome.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
   static const String welcome = "/welcome";
-  static const String signIn = "/signIn";
+  static const String home = "/home";
 
   static Route? onGenerated(RouteSettings settings) {
     switch (settings.name) {
       case welcome:
         return _materialRoute(page: Welcome());
 
-      case signIn:
+      case "/signIn":
         return _materialRoute(page: SignIn());
+
+      case home:
+        return _materialRoute(page: Home());
 
       default:
         return null;

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_chat/src/domain/entities/user_entity.dart';
+import '../../../domain/entities/user_entity.dart';
 
 class UserDataModel extends UserData {
   UserDataModel({
@@ -26,13 +26,13 @@ class UserDataModel extends UserData {
   ) {
     final data = snapshot.data()!;
     return UserDataModel(
-      id: data['id'],
-      name: data['name'],
-      email: data['email'],
-      photoUrl: data['photoUrl'],
-      location: data['location'],
-      fcmToken: data['fcmToken'],
-      createdAt: data['createdAt'],
+      id: data['id'] as String,
+      name: data['name'] as String,
+      email: data['email'] as String,
+      photoUrl: data['photoUrl'] as String,
+      location: data['location'] as String,
+      fcmToken: data['fcmToken'] as String,
+      createdAt: data['createdAt'] as Timestamp,
     );
   }
 

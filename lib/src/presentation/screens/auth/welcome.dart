@@ -25,9 +25,7 @@ class _WelcomeState extends State<Welcome> {
             scrollDirection: Axis.horizontal,
             physics: ClampingScrollPhysics(),
             controller: PageController(
-              initialPage: 0,
               keepPage: false,
-              viewportFraction: 1,
             ),
             onPageChanged: (index) {
               setState(() {
@@ -45,7 +43,7 @@ class _WelcomeState extends State<Welcome> {
                     colors: const [
                       Color(0xFF3287fb),
                       Color(0xFF5DA1FF),
-                      Color(0xFF3287fb),
+                      Color(0xFF4291FF),
                     ],
                   ),
                 ),
@@ -91,7 +89,7 @@ class _WelcomeState extends State<Welcome> {
                     colors: const [
                       Color(0xFF3287fb),
                       Color(0xFF5DA1FF),
-                      Color(0xFF3287fb),
+                      Color(0xFF4291FF),
                     ],
                   ),
                 ),
@@ -139,7 +137,7 @@ class _WelcomeState extends State<Welcome> {
                     colors: const [
                       Color(0xFF3287fb),
                       Color(0xFF5DA1FF),
-                      Color(0xFF3287fb),
+                      Color(0xFF4291FF),
                     ],
                   ),
                 ),

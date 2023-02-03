@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../domain/entities/user_entity.dart';
 
 class UserDataModel extends UserData {
-  UserDataModel({
+ const UserDataModel({
     required String id,
     required String name,
     required String email,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constant.dart';
-import '../../../data/remote/repositories/firebase_repo_impl.dart';
+import '../../../data/remote/repositories/auth_repo_impl.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -40,7 +40,6 @@ class SignIn extends StatelessWidget {
                     child: Image.asset(
                       "assets/images/ic_launcher.png",
                       height: 80,
-                      width: 80,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -65,8 +64,7 @@ class SignIn extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () =>
-                        FirebaseAuthRepoImpl().googleSignIn(context),
+                    onPressed: () => AuthRepo().googleSignIn(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primary,
                       foregroundColor: onPrimary,

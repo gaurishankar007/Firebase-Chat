@@ -7,17 +7,15 @@ import '../../../core/constant.dart';
 import '../../local/local_data.dart';
 import '../models/google_user_model.dart';
 import '../models/user_model.dart';
-import '../../../domain/repositories/firebase_repo.dart';
+import '../../../domain/repositories/auth_repo.dart';
 import '../../../presentation/widgets/messages/message.dart';
 
-class FirebaseAuthRepoImpl implements FirebaseAuthRepo {
+class AuthRepo implements FirebaseAuthRepo {
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: <String>['openid'],
   );
   final _firebaseAuth = FirebaseAuth.instance;
   final _database = FirebaseFirestore.instance;
-
-  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
   @override
   Future<void> googleSignIn(BuildContext context) async {
@@ -39,12 +37,13 @@ class FirebaseAuthRepoImpl implements FirebaseAuthRepo {
             photoUrl = googleUserData.photoUrl ?? "";
 
         LocalData.saveUser(
-            googleUser: GoogleUserModel(
-          accessToken: id,
-          displayName: displayName,
-          email: email,
-          photoUrl: photoUrl,
-        ));
+          googleUser: GoogleUserModel(
+            accessToken: id,
+            displayName: displayName,
+            email: email,
+            photoUrl: photoUrl,
+          ),
+        );
 
         final userData = await _database
             .collection("users")
@@ -77,8 +76,6 @@ class FirebaseAuthRepoImpl implements FirebaseAuthRepo {
               .add(data);
         }
 
-        loading.close();
-
         final gAuthentication = await googleUserData.authentication;
 
         await _firebaseAuth.signInWithCredential(GoogleAuthProvider.credential(
@@ -86,7 +83,11 @@ class FirebaseAuthRepoImpl implements FirebaseAuthRepo {
           accessToken: gAuthentication.accessToken,
         ));
 
+        loading.close();
+
         if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
+
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.green,
@@ -100,13 +101,6 @@ class FirebaseAuthRepoImpl implements FirebaseAuthRepo {
           );
         }
         return;
-      }
-
-      if (context.mounted) {
-        MessageScreen.message().show(
-          context: context,
-          message: "User does not exist.",
-        );
       }
     } catch (e) {
       MessageScreen.message().show(

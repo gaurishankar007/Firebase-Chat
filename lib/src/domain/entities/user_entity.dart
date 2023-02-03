@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class UserData {
+class UserData extends Equatable {
   final String id;
   final String name;
   final String email;
@@ -9,7 +10,7 @@ class UserData {
   final String fcmToken;
   final Timestamp createdAt;
 
-  UserData({
+  const UserData({
     required this.id,
     required this.name,
     required this.email,
@@ -18,4 +19,15 @@ class UserData {
     required this.fcmToken,
     required this.createdAt,
   });
+
+  @override
+  List<Object> get props => [
+        id,
+        name,
+        email,
+        photoUrl,
+        location,
+        fcmToken,
+        createdAt,
+      ];
 }

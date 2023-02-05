@@ -14,7 +14,7 @@ class _WelcomeState extends State<Welcome> {
 
   @override
   Widget build(BuildContext context) {
-    Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+    Color primary = Theme.of(context).colorScheme.primary;
     Color surface = Theme.of(context).colorScheme.surface;
 
     return Scaffold(
@@ -45,6 +45,7 @@ class _WelcomeState extends State<Welcome> {
                       Color(0xFF5DA1FF),
                       Color(0xFF4291FF),
                     ],
+                    transform: GradientRotation(90),
                   ),
                 ),
                 child: Column(
@@ -60,20 +61,13 @@ class _WelcomeState extends State<Welcome> {
                     SizedBox(
                       height: sHeight(context) * .15,
                     ),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
+                    Text(
+                      "Get Started",
+                      style: TextStyle(
                         color: surface,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Text(
-                        "Get Started",
-                        style: TextStyle(
-                          color: primaryContainer,
-                          fontSize: 54,
-                          fontWeight: FontWeight.bold,
-                          height: 1.2,
-                        ),
+                        fontSize: 54,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
                       ),
                     ),
                   ],
@@ -91,6 +85,7 @@ class _WelcomeState extends State<Welcome> {
                       Color(0xFF5DA1FF),
                       Color(0xFF4291FF),
                     ],
+                    transform: GradientRotation(90),
                   ),
                 ),
                 child: Column(
@@ -139,6 +134,7 @@ class _WelcomeState extends State<Welcome> {
                       Color(0xFF5DA1FF),
                       Color(0xFF4291FF),
                     ],
+                    transform: GradientRotation(90),
                   ),
                 ),
                 child: Stack(
@@ -183,6 +179,10 @@ class _WelcomeState extends State<Welcome> {
                         onPressed: () {
                           Navigator.pushNamed(context, "/signIn");
                         },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: surface,
+                          foregroundColor: primary,
+                        ),
                         child: Text("Sign In"),
                       ),
                     ),
@@ -197,8 +197,8 @@ class _WelcomeState extends State<Welcome> {
               activeIndex: pageIndex,
               count: 3,
               effect: ExpandingDotsEffect(
-                dotColor: Colors.white.withOpacity(.7),
-                activeDotColor: primaryContainer,
+                dotColor: Colors.black.withOpacity(.2),
+                activeDotColor: surface,
                 dotHeight: 8,
                 dotWidth: 8,
               ),

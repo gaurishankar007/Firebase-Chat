@@ -1,3 +1,5 @@
+import 'package:firebase_chat/src/data/argument/chat_message_arg.dart';
+import 'package:firebase_chat/src/presentation/screens/chat_message.dart';
 import 'package:firebase_chat/src/presentation/screens/home.dart';
 
 import '../../presentation/screens/auth/sign_in.dart';
@@ -18,6 +20,13 @@ class AppRoutes {
 
       case home:
         return _materialRoute(page: Home());
+
+      case "/chatMessage":
+        return _materialRoute(
+          page: ChatMessage(
+            data: settings.arguments as ChatMessageArg,
+          ),
+        );
 
       default:
         return null;

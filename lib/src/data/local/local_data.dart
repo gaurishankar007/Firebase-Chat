@@ -35,6 +35,7 @@ class LocalData {
 
   static saveUser({required GoogleUserModel googleUser}) {
     _sharedPref.setString("userData", jsonEncode(googleUser.toJson()));
+    _googleUserModel = googleUser;
   }
 
   static removeUser() => _sharedPref.remove("userData");

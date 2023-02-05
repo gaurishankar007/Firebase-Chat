@@ -18,7 +18,7 @@ class AuthRepo implements FirebaseAuthRepo {
   final _database = FirebaseFirestore.instance;
 
   @override
-  Future<void> googleSignIn(BuildContext context) async {
+  Future<void> googleSignIn({required BuildContext context}) async {
     try {
       final googleUserData = await _googleSignIn.signIn();
 
@@ -27,7 +27,7 @@ class AuthRepo implements FirebaseAuthRepo {
         if (context.mounted) {
           loading = MessageScreen.message().showLoading(
             context: context,
-            message: "Please wait while we're signing you in...",
+            message: "Just a moment, you're being signed in...",
           );
         }
 
@@ -56,7 +56,7 @@ class AuthRepo implements FirebaseAuthRepo {
             .get();
 
         if (userData.docs.isEmpty) {
-          final data = UserDataModel(
+          final UserDataModel userDataModel = UserDataModel(
             id: id,
             name: displayName,
             email: email,
@@ -73,7 +73,7 @@ class AuthRepo implements FirebaseAuthRepo {
                 toFirestore: (UserDataModel userData, options) =>
                     userData.toFirestore(),
               )
-              .add(data);
+              .add(userDataModel);
         }
 
         final gAuthentication = await googleUserData.authentication;
@@ -112,7 +112,7 @@ class AuthRepo implements FirebaseAuthRepo {
   }
 
   @override
-  Future<void> signOut(BuildContext context) async {
+  Future<void> signOut({required BuildContext context}) async {
     LocalData.removeUser();
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();

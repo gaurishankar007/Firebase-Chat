@@ -1,21 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_chat/src/core/constant.dart';
+import 'package:firebase_chat/src/data/remote/repositories/chat_repo_impl.dart';
 import 'package:firebase_chat/src/presentation/blocs/search/search_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class Search extends StatefulWidget {
+class Search extends StatelessWidget {
   const Search({super.key});
 
   @override
-  State<Search> createState() => _SearchState();
-}
-
-class _SearchState extends State<Search> {
-  @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
+    Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
     Color surface = Theme.of(context).colorScheme.surface;
     Color onSurface = Theme.of(context).colorScheme.onSurface;
 
@@ -25,65 +22,68 @@ class _SearchState extends State<Search> {
         builder: (context, state) {
           if (state is SearchResultState) {
             return Scaffold(
-              body: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.symmetric(
-                  horizontal: sWidth(context) * .04,
-                  vertical: 10,
+              appBar: AppBar(
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        primary.withOpacity(.5),
+                        primary,
+                        primaryContainer.withOpacity(.5),
+                        primaryContainer,
+                      ],
+                      transform: GradientRotation(90),
+                    ),
+                  ),
                 ),
+                title: Container(
+                  height: 35,
+                  decoration: BoxDecoration(
+                    color: surface,
+                    borderRadius: BorderRadius.circular(cBorderRadius),
+                  ),
+                  child: TextFormField(
+                    controller: state.searchController,
+                    textInputAction: TextInputAction.search,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                      prefixIcon: Icon(Icons.search_rounded),
+                      prefixIconColor: onSurface,
+                      hintText: 'Search',
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    onTap: () => BlocProvider.of<SearchBloc>(context)
+                      ..add(SearchToggleEvent(searching: true)),
+                    onChanged: (value) {},
+                  ),
+                ),
+                actions: [
+                  if (state.searching)
+                    TextButton(
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        BlocProvider.of<SearchBloc>(context)
+                            .add(SearchToggleEvent(searching: false));
+                      },
+                      child: Text(
+                        "Cancel",
+                        style: mediumBoldText.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Container(
-                            height: 30,
-                            margin: EdgeInsets.only(right: 10),
-                            decoration: BoxDecoration(
-                              color: surface,
-                              borderRadius:
-                                  BorderRadius.circular(cBorderRadius),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: onSurface.withOpacity(.05),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                )
-                              ],
-                            ),
-                            child: TextFormField(
-                              controller: state.searchController,
-                              textInputAction: TextInputAction.search,
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 5),
-                                prefixIcon: Icon(Icons.search_rounded),
-                                prefixIconColor: onSurface,
-                                hintText: 'Search',
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              onTap: () => BlocProvider.of<SearchBloc>(context)
-                                ..add(SearchToggleEvent(searching: true)),
-                              onChanged: (value) {},
-                            ),
-                          ),
-                        ),
-                        if (state.searching)
-                          TextButton(
-                            onPressed: () =>
-                                BlocProvider.of<SearchBloc>(context)
-                                  ..add(SearchToggleEvent(searching: false)),
-                            style: TextButton.styleFrom(minimumSize: Size.zero),
-                            child: Text("Cancel", style: mediumBoldText),
-                          ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
                     ListView.separated(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: sWidth(context) * .04,
+                        vertical: 10,
+                      ),
                       shrinkWrap: true,
                       itemCount: state.userDataModels.length,
                       separatorBuilder: (context, index) => Padding(
@@ -95,7 +95,9 @@ class _SearchState extends State<Search> {
                       ),
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () {},
+                          onTap: () => FirebaseChatRepoImpl().viewChat(
+                              userDataModel: state.userDataModels[index],
+                              context: context),
                           child: Row(
                             children: [
                               Container(
@@ -114,7 +116,7 @@ class _SearchState extends State<Search> {
                                 ),
                                 child: ClipOval(
                                   child: CachedNetworkImage(
-                                    width: sWidth(context) * .13,
+                                    width: 40,
                                     fit: BoxFit.cover,
                                     imageUrl:
                                         state.userDataModels[index].photoUrl,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/constant.dart';
+
 ColorScheme lightScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Color(0xFF3287fb),
@@ -36,10 +38,40 @@ ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: lightScheme.background,
   colorScheme: lightScheme,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+    iconTheme: IconThemeData(color: Colors.white),
+    centerTitle: true,
+    titleTextStyle: largeText.copyWith(
+      color: Colors.white,
+    ),
+    elevation: 0,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: lightScheme.primary,
+      foregroundColor: lightScheme.onPrimary,
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: darkScheme.background,
   colorScheme: darkScheme,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+    iconTheme: IconThemeData(color: Colors.white),
+    centerTitle: true,
+    titleTextStyle: largeText.copyWith(
+      color: Colors.white,
+    ),
+    elevation: 0,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: lightScheme.primary,
+      foregroundColor: lightScheme.onPrimary,
+    ),
+  ),
 );

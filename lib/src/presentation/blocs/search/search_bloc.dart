@@ -31,6 +31,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   _searchToggleEvent(SearchToggleEvent event, emit) {
+    if (!event.searching) {
+      searchController.clear();
+    }
+
     emit(SearchResultState(
       searchController: searchController,
       userDataModels: userDataModels,

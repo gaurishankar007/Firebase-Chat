@@ -7,18 +7,39 @@ class ChatList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+
     return Scaffold(
-      body: Column(
-        children: [
-          Text("HomePage"),
-          SizedBox(
-            height: 20,
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                primary.withOpacity(.5),
+                primary,
+                primaryContainer.withOpacity(.5),
+                primaryContainer,
+              ],
+              transform: GradientRotation(90),
+            ),
           ),
-          ElevatedButton(
-            onPressed: () => AuthRepo().signOut(context: context),
-            child: Text("Sign Out"),
-          ),
-        ],
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("HomePage"),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () => AuthRepo().signOut(context: context),
+              child: Text("Sign Out"),
+            ),
+          ],
+        ),
       ),
     );
   }

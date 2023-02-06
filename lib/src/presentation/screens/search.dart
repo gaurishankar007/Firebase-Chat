@@ -18,7 +18,7 @@ class Search extends StatelessWidget {
 
     return BlocProvider(
       create: (context) => SearchBloc()..add(SearchLoadedEvent()),
-      child: BlocBuilder<SearchBloc, SearchState>(
+      child: BlocBuilder<SearchBloc, SearchState?>(
         builder: (context, state) {
           if (state is SearchResultState) {
             return Scaffold(
@@ -87,14 +87,17 @@ class Search extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: state.userDataModels.length,
                       separatorBuilder: (context, index) => Padding(
-                        padding:
-                            EdgeInsets.only(left: sWidth(context) * .13 + 10),
+                        padding: EdgeInsets.only(
+                          left: sWidth(context) * .13,
+                          bottom: 5,
+                        ),
                         child: Divider(
                           color: onSurface.withOpacity(.3),
                         ),
                       ),
                       itemBuilder: (context, index) {
                         return InkWell(
+                          highlightColor: Colors.transparent,
                           onTap: () => FirebaseChatRepoImpl().viewChat(
                               userDataModel: state.userDataModels[index],
                               context: context),
@@ -140,7 +143,10 @@ class Search extends StatelessWidget {
                                 child: Text(
                                   state.userDataModels[index].name,
                                   textAlign: TextAlign.start,
-                                  style: largeText.copyWith(color: onSurface),
+                                  style: largeText.copyWith(
+                                    color: onSurface,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               )
                             ],
@@ -154,10 +160,45 @@ class Search extends StatelessWidget {
             );
           }
 
-          return Center(
-            child: SpinKitCircle(
-              color: primary,
-              size: iconSize * 2,
+          return Scaffold(
+            appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      primary.withOpacity(.5),
+                      primary,
+                      primaryContainer.withOpacity(.5),
+                      primaryContainer,
+                    ],
+                    transform: GradientRotation(90),
+                  ),
+                ),
+              ),
+              title: Container(
+                height: 35,
+                decoration: BoxDecoration(
+                  color: surface,
+                  borderRadius: BorderRadius.circular(cBorderRadius),
+                ),
+                child: TextFormField(
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                    prefixIcon: Icon(Icons.search_rounded),
+                    prefixIconColor: onSurface,
+                    hintText: 'Search',
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                ),
+              ),
+            ),
+            body: Center(
+              child: SpinKitCircle(
+                color: primary,
+                size: iconSize * 2,
+              ),
             ),
           );
         },

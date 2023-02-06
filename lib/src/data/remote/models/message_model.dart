@@ -5,7 +5,7 @@ class MessageModel extends Message {
   MessageModel({
     required String uId,
     required String content,
-    required String type,
+    required MessageType type,
     required Timestamp createdAt,
   }) : super(
           uId: uId,
@@ -18,12 +18,12 @@ class MessageModel extends Message {
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {
-    final data = snapshot.data();
+    final data = snapshot.data()!;
     return MessageModel(
-      uId: data?['uId'] as String,
-      content: data?['content'] as String,
-      type: data?['type'] as String,
-      createdAt: data?['createdAt'] as Timestamp,
+      uId: data['uId'] as String,
+      content: data['content'] as String,
+      type: data['type'] == "text" ? MessageType.text : MessageType.image,
+      createdAt: data['createdAt'] as Timestamp,
     );
   }
 
@@ -31,7 +31,7 @@ class MessageModel extends Message {
     return {
       "uId": uId,
       "content": content,
-      "type": type,
+      "type": type == MessageType.text ? "text" : "image",
       "createdAt": createdAt,
     };
   }

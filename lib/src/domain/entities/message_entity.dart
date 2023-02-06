@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Message {
   final String uId;
   final String content;
-  final String type;
+  final MessageType type;
   final Timestamp createdAt;
 
   Message({
@@ -12,4 +12,9 @@ class Message {
     required this.type,
     required this.createdAt,
   });
+}
+
+enum MessageType {
+  text,
+  image,
 }

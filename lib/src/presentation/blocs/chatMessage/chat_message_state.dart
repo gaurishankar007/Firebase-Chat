@@ -7,17 +7,19 @@ abstract class ChatMessageState extends Equatable {
   List<Object> get props => [];
 }
 
-class ChatMessageInitial extends ChatMessageState {}
+class MessageLoadingState extends ChatMessageState {}
 
-class ChatMessageLoaded extends ChatMessageState {
+class MessageLoadedState extends ChatMessageState {
   final ScrollController scrollController;
   final TextEditingController textController;
   final FocusNode focusNode;
+  final Stream<QuerySnapshot<MessageModel>> chatStream;
 
-  const ChatMessageLoaded({
+  const MessageLoadedState({
     required this.scrollController,
     required this.textController,
     required this.focusNode,
+    required this.chatStream,
   });
 
   @override

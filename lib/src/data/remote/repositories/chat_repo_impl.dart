@@ -102,7 +102,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
     required MessageModel messageModel,
     required String chatId,
   }) async {
-    final doc = await _database
+    await _database
         .collection("chat")
         .doc(chatId)
         .collection("message")
@@ -117,7 +117,5 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
       "lastMsg": messageModel.content,
       "lastTime": Timestamp.now(),
     });
-
-    print(doc.id);
   }
 }

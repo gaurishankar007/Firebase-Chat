@@ -21,9 +21,41 @@ class FirebaseUserRepoImpl extends FirebaseUserRepo {
             toFirestore: (UserDataModel userData, options) =>
                 userData.toFirestore(),
           )
+          .limit(20)
           .get();
 
       return DataSuccess(data: users.docs.map((doc) => doc.data()).toList());
+    } catch (e) {
+      return DataFailed(error: e.toString());
+    }
+  }
+
+  @override
+  Future<DataState<List<UserDataModel>>> searchUsers(
+      {required String name}) async {
+    try {
+      final users = await _database
+          .collection("users")
+          .where("name", isEqualTo: name)
+          .withConverter(
+            fromFirestore: UserDataModel.fromFirestore,
+            toFirestore: (UserDataModel userData, options) =>
+                userData.toFirestore(),
+          )
+          .limit(20)
+          .get();
+
+      final List<UserDataModel> usersModels = [];
+
+      for (var doc in users.docs) {
+        if (doc.data().id != token) {
+          usersModels.add(doc.data());
+        }
+      }
+
+      return DataSuccess(data: usersModels);
+    } on SocketException {
+      return ServerTimeOut();
     } catch (e) {
       return DataFailed(error: e.toString());
     }

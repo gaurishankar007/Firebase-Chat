@@ -1,4 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
+import 'package:firebase_chat/src/core/resources/data_state.dart';
 import 'package:firebase_chat/src/data/remote/models/message_model.dart';
+import 'package:firebase_chat/src/domain/entities/message_entity.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat/src/data/argument/chat_message_arg.dart';
@@ -14,10 +21,49 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
   final GoogleUserModel googleUserModel = LocalData.googleUserModel!;
 
   @override
+  Future<DataState<List<ChatModel>>> chatList() async {
+    try {
+      final fromChat = await _database
+          .collection("chat")
+          .withConverter(
+            fromFirestore: ChatModel.fromFirestore,
+            toFirestore: (ChatModel messageModel, options) =>
+                messageModel.toFirestore(),
+          )
+          .where("fromId", isEqualTo: googleUserModel.accessToken)
+          .get();
+
+      final toChat = await _database
+          .collection("chat")
+          .withConverter(
+            fromFirestore: ChatModel.fromFirestore,
+            toFirestore: (ChatModel messageModel, options) =>
+                messageModel.toFirestore(),
+          )
+          .where("toId", isEqualTo: googleUserModel.accessToken)
+          .get();
+
+      List<ChatModel> chatModels = [];
+      if (fromChat.docs.isNotEmpty) {
+        chatModels.addAll(fromChat.docs.map((doc) => doc.data()).toList());
+      }
+      if (toChat.docs.isNotEmpty) {
+        chatModels.addAll(toChat.docs.map((doc) => doc.data()).toList());
+      }
+
+      return DataSuccess(data: chatModels);
+    } on SocketException {
+      return ServerTimeOut();
+    } catch (error) {
+      return DataFailed(error: error.toString());
+    }
+  }
+
+  @override
   Future<void> viewChat(
       {required UserDataModel userDataModel,
       required BuildContext context}) async {
-    final fromMessage = await _database
+    final fromChat = await _database
         .collection("chat")
         .withConverter(
           fromFirestore: ChatModel.fromFirestore,
@@ -28,7 +74,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
         .where("toId", isEqualTo: userDataModel.id)
         .get();
 
-    final toMessage = await _database
+    final toChat = await _database
         .collection("chat")
         .withConverter(
           fromFirestore: ChatModel.fromFirestore,
@@ -39,7 +85,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
         .where("toId", isEqualTo: googleUserModel.accessToken)
         .get();
 
-    if (fromMessage.docs.isEmpty && toMessage.docs.isEmpty) {
+    if (fromChat.docs.isEmpty && toChat.docs.isEmpty) {
       final ChatModel messageModel = ChatModel(
         fromId: googleUserModel.accessToken,
         toId: userDataModel.id,
@@ -76,10 +122,10 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
     } else {
       late String chatId;
 
-      if (fromMessage.docs.isNotEmpty) {
-        chatId = fromMessage.docs.first.id;
+      if (fromChat.docs.isNotEmpty) {
+        chatId = fromChat.docs.first.id;
       } else {
-        chatId = toMessage.docs.first.id;
+        chatId = toChat.docs.first.id;
       }
 
       if (context.mounted) {
@@ -98,24 +144,77 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
   }
 
   @override
-  Future<void> sendMessage({
-    required MessageModel messageModel,
-    required String chatId,
-  }) async {
-    await _database
-        .collection("chat")
-        .doc(chatId)
-        .collection("message")
-        .withConverter(
-          fromFirestore: MessageModel.fromFirestore,
-          toFirestore: (MessageModel messageModel, options) =>
-              messageModel.toFirestore(),
-        )
-        .add(messageModel);
+  Future<DataState> sendMessage(
+      {required MessageModel messageModel, required String chatId}) async {
+    try {
+      await _database
+          .collection("chat")
+          .doc(chatId)
+          .collection("message")
+          .withConverter(
+            fromFirestore: MessageModel.fromFirestore,
+            toFirestore: (MessageModel messageModel, options) =>
+                messageModel.toFirestore(),
+          )
+          .add(messageModel);
 
-    await _database.collection("chat").doc(chatId).update({
-      "lastMsg": messageModel.content,
-      "lastTime": Timestamp.now(),
-    });
+      await _database.collection("chat").doc(chatId).update({
+        "lastMsg": messageModel.content,
+        "lastTime": Timestamp.now(),
+      });
+
+      return DataSuccess(data: "success");
+    } on SocketException {
+      return ServerTimeOut();
+    } catch (error) {
+      return DataFailed(error: error.toString());
+    }
+  }
+
+  @override
+  Future<DataState> sendImage(
+      {required String uId,
+      required File image,
+      required String chatId}) async {
+    try {
+      var random = Random.secure();
+      var values = List<int>.generate(10, (i) => random.nextInt(255));
+      final String fileName =
+          base64UrlEncode(values) + DateTime.now().toIso8601String();
+
+      final Reference ref =
+          FirebaseStorage.instance.ref("messageFile").child(fileName);
+      await ref.putFile(image);
+      final imageDownloadURL = await ref.getDownloadURL();
+
+      final MessageModel messageModel = MessageModel(
+        uId: uId,
+        content: imageDownloadURL,
+        type: MessageType.image,
+        createdAt: Timestamp.now(),
+      );
+
+      await _database
+          .collection("chat")
+          .doc(chatId)
+          .collection("message")
+          .withConverter(
+            fromFirestore: MessageModel.fromFirestore,
+            toFirestore: (MessageModel messageModel, options) =>
+                messageModel.toFirestore(),
+          )
+          .add(messageModel);
+
+      await _database.collection("chat").doc(chatId).update({
+        "lastMsg": "[image]",
+        "lastTime": Timestamp.now(),
+      });
+
+      return DataSuccess(data: "success");
+    } on SocketException {
+      return ServerTimeOut();
+    } catch (error) {
+      return DataFailed(error: error.toString());
+    }
   }
 }

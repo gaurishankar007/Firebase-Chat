@@ -4,4 +4,5 @@ import '../../data/remote/models/user_model.dart';
 
 abstract class FirebaseUserRepo {
   Future<DataState<List<UserDataModel>>>? loadUsers();
+  Future<DataState<List<UserDataModel>>>? searchUsers({required String name});
 }

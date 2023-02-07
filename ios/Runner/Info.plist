@@ -47,6 +47,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>The app needs access to the camera to send image</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>The app needs the location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The app needs access to the photo library to send image</string>
 	<key>CFBundleURLTypes</key>
     <array>
         <dict>

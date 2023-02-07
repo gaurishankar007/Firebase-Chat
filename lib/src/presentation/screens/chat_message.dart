@@ -8,6 +8,7 @@ import 'package:firebase_chat/src/presentation/widgets/page_parts/message_conten
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../core/constant.dart';
 
@@ -23,8 +24,8 @@ class ChatMessage extends StatelessWidget {
     Color onSurface = Theme.of(context).colorScheme.onSurface;
 
     return BlocProvider(
-      create: (context) =>
-          ChatMessageBloc()..add(MessageLoadedEvent(chatId: data.chatId)),
+      create: (context) => ChatMessageBloc(context: context)
+        ..add(MessageLoadedEvent(chatId: data.chatId)),
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
@@ -85,41 +86,46 @@ class ChatMessage extends StatelessWidget {
                     child: StreamBuilder(
                       stream: state.chatStream,
                       builder: (context, snapshot) {
-                        List<MessageModel> messageModels = snapshot.data!.docs
-                            .map((doc) => doc.data())
-                            .toList();
-                        print(snapshot.data!.docs);
+                        if (snapshot.hasData) {
+                          List<MessageModel> messageModels = snapshot.data!.docs
+                              .map((doc) => doc.data())
+                              .toList();
 
-                        // if (snapshot.hasData) {
-                        //   return ListView.separated(
-                        //     controller: state.scrollController,
-                        //     itemCount: messageModels.length,
-                        //     separatorBuilder: (context, index) => SizedBox(
-                        //       height: 5,
-                        //     ),
-                        //     itemBuilder: (context, index) {
-                        //       if (messageModels[index].uId == data.toId) {
-                        //         return messageContent(
-                        //           messageModel: messageModels[index],
-                        //           context: context,
-                        //           side: MessageSide.right,
-                        //         );
-                        //       } else {
-                        //         return messageContent(
-                        //           messageModel: messageModels[index],
-                        //           context: context,
-                        //           side: MessageSide.left,
-                        //         );
-                        //       }
-                        //     },
-                        //   );
-                        // }
+                          if (messageModels.isEmpty) {
+                            return Column(
+                              children: [
+                                Text("Say 'hi' to ${data.toName}."),
+                              ],
+                            );
+                          }
 
-                        return Column(
-                          children: [
-                            Text("Say 'hi' to ${data.toName}."),
-                          ],
-                        );
+                          return ListView.separated(
+                            reverse: true,
+                            controller: state.scrollController,
+                            padding: EdgeInsets.only(bottom: 55),
+                            itemCount: messageModels.length,
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 10,
+                            ),
+                            itemBuilder: (context, index) {
+                              if (messageModels[index].uId == data.toId) {
+                                return messageContent(
+                                  messageModel: messageModels[index],
+                                  context: context,
+                                  side: MessageSide.right,
+                                );
+                              } else {
+                                return messageContent(
+                                  messageModel: messageModels[index],
+                                  context: context,
+                                  side: MessageSide.left,
+                                );
+                              }
+                            },
+                          );
+                        }
+
+                        return Column();
                       },
                     ),
                   ),
@@ -128,10 +134,17 @@ class ChatMessage extends StatelessWidget {
                       horizontal: sWidth(context) * .04,
                       vertical: 10,
                     ),
+                    height: 50,
                     color: surface,
                     child: Row(
                       children: [
                         GestureDetector(
+                          onTap: () => BlocProvider.of<ChatMessageBloc>(context)
+                              .add(SendImageEvent(
+                            uId: data.toId,
+                            imageSource: ImageSource.camera,
+                            chatId: data.chatId,
+                          )),
                           child: Icon(
                             Icons.camera_alt_rounded,
                             color: primary,
@@ -139,6 +152,12 @@ class ChatMessage extends StatelessWidget {
                           ),
                         ),
                         GestureDetector(
+                          onTap: () => BlocProvider.of<ChatMessageBloc>(context)
+                              .add(SendImageEvent(
+                            uId: data.toId,
+                            imageSource: ImageSource.gallery,
+                            chatId: data.chatId,
+                          )),
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 10),
                             child: Icon(

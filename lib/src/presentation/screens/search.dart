@@ -17,7 +17,8 @@ class Search extends StatelessWidget {
     Color onSurface = Theme.of(context).colorScheme.onSurface;
 
     return BlocProvider(
-      create: (context) => SearchBloc()..add(SearchLoadedEvent()),
+      create: (context) =>
+          SearchBloc(context: context)..add(SearchLoadedEvent()),
       child: BlocBuilder<SearchBloc, SearchState?>(
         builder: (context, state) {
           if (state is SearchResultState) {
@@ -55,7 +56,8 @@ class Search extends StatelessWidget {
                     ),
                     onTap: () => BlocProvider.of<SearchBloc>(context)
                       ..add(SearchToggleEvent(searching: true)),
-                    onChanged: (value) {},
+                    onChanged: (value) => BlocProvider.of<SearchBloc>(context)
+                      ..add(SearchingEvent(name: state.searchController.text)),
                   ),
                 ),
                 actions: [

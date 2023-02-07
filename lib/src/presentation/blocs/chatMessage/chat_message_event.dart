@@ -22,3 +22,15 @@ class SendMessageEvent extends ChatMessageEvent {
     required this.chatId,
   });
 }
+
+class SendImageEvent extends ChatMessageEvent {
+  final String uId;
+  final ImageSource imageSource;
+  final String chatId;
+
+  const SendImageEvent({
+    required this.uId,
+    required this.imageSource,
+    required this.chatId,
+  });
+}

@@ -47,19 +47,39 @@ Widget messageContent({
       else
         GestureDetector(
           onTap: () {},
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(cBorderRadius),
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: messageModel.content,
-              placeholder: (context, url) => SpinKitCircle(
-                color: primary,
-                size: iconSize,
-              ),
-              errorWidget: (context, url, error) => Icon(
-                Icons.bug_report_rounded,
-                size: iconSize,
-                color: primary,
+          child: Container(
+            constraints:
+                BoxConstraints(maxWidth: sWidth(context) * .7, maxHeight: 200),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(cBorderRadius),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: messageModel.content,
+                placeholder: (context, url) => Container(
+                  height: sWidth(context) * .4,
+                  width: sWidth(context) * .4,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        primary.withOpacity(.5),
+                        primary,
+                        primaryContainer,
+                        primaryContainer.withOpacity(.5),
+                      ],
+                      transform: GradientRotation(90),
+                    ),
+                    borderRadius: BorderRadius.circular(cBorderRadius),
+                  ),
+                  child: SpinKitCircle(
+                    color: Colors.white,
+                    size: iconSize,
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.bug_report_rounded,
+                  size: iconSize,
+                  color: primary,
+                ),
               ),
             ),
           ),

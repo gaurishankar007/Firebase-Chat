@@ -119,6 +119,17 @@ class AuthRepo implements FirebaseAuthRepo {
 
     if (context.mounted) {
       Navigator.pushNamedAndRemoveUntil(context, "/signIn", (route) => false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.orange,
+          content: Text(
+            "You have been signed out.",
+            style: smallBoldText.copyWith(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
     }
   }
 }

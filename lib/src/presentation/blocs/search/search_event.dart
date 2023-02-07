@@ -14,3 +14,9 @@ class SearchToggleEvent extends SearchEvent {
 
   const SearchToggleEvent({required this.searching});
 }
+
+class SearchingEvent extends SearchEvent {
+  final String name;
+
+  const SearchingEvent({required this.name});
+}

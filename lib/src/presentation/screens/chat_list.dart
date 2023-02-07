@@ -12,6 +12,7 @@ class ChatList extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        title: Text("Messages"),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

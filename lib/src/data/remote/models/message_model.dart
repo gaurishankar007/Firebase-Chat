@@ -19,19 +19,24 @@ class MessageModel extends Message {
     SnapshotOptions? options,
   ) {
     final data = snapshot.data()!;
+    final MessageType type =
+        data['type'] == "text" ? MessageType.text : MessageType.image;
+
     return MessageModel(
       uId: data['uId'] as String,
       content: data['content'] as String,
-      type: data['type'] == "text" ? MessageType.text : MessageType.image,
+      type: type,
       createdAt: data['createdAt'] as Timestamp,
     );
   }
 
   Map<String, dynamic> toFirestore() {
+    final String newType = type == MessageType.text ? "text" : "image";
+
     return {
       "uId": uId,
       "content": content,
-      "type": type == MessageType.text ? "text" : "image",
+      "type": newType,
       "createdAt": createdAt,
     };
   }

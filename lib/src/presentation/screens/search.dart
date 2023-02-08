@@ -77,87 +77,79 @@ class Search extends StatelessWidget {
                     ),
                 ],
               ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: sWidth(context) * .04,
-                        vertical: 10,
-                      ),
-                      shrinkWrap: true,
-                      itemCount: state.userDataModels.length,
-                      separatorBuilder: (context, index) => Padding(
-                        padding: EdgeInsets.only(
-                          left: sWidth(context) * .13,
-                          bottom: 5,
-                        ),
-                        child: Divider(
-                          color: onSurface.withOpacity(.3),
-                        ),
-                      ),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          highlightColor: Colors.transparent,
-                          onTap: () => FirebaseChatRepoImpl().viewChat(
-                              userDataModel: state.userDataModels[index],
-                              context: context),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  color: surface,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: onSurface.withOpacity(.05),
-                                      spreadRadius: 2,
-                                      blurRadius: 3,
-                                      offset: Offset(2, 2),
-                                    )
-                                  ],
-                                ),
-                                child: ClipOval(
-                                  child: CachedNetworkImage(
-                                    width: 40,
-                                    fit: BoxFit.cover,
-                                    imageUrl:
-                                        state.userDataModels[index].photoUrl,
-                                    placeholder: (context, url) =>
-                                        SpinKitCircle(
-                                      color: primary,
-                                      size: iconSize,
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        Center(
-                                      child: Icon(
-                                        Icons.bug_report_rounded,
-                                        size: iconSize,
-                                        color: primary,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: Text(
-                                  state.userDataModels[index].name,
-                                  textAlign: TextAlign.start,
-                                  style: largeText.copyWith(
-                                    color: onSurface,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
+              body: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(
+                  horizontal: sWidth(context) * .04,
+                  vertical: 10,
+                ),
+                shrinkWrap: true,
+                itemCount: state.userDataModels.length,
+                separatorBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.only(
+                    left: sWidth(context) * .13,
+                    bottom: 5,
+                  ),
+                  child: Divider(
+                    color: onSurface.withOpacity(.3),
+                  ),
+                ),
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    highlightColor: Colors.transparent,
+                    onTap: () => FirebaseChatRepoImpl().viewChat(
+                        userDataModel: state.userDataModels[index],
+                        context: context),
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 10),
+                          decoration: BoxDecoration(
+                            color: surface,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: onSurface.withOpacity(.05),
+                                spreadRadius: 2,
+                                blurRadius: 3,
+                                offset: Offset(2, 2),
                               )
                             ],
                           ),
-                        );
-                      },
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                              imageUrl: state.userDataModels[index].photoUrl,
+                              placeholder: (context, url) => SpinKitCircle(
+                                color: primary,
+                                size: iconSize,
+                              ),
+                              errorWidget: (context, url, error) => Center(
+                                child: Icon(
+                                  Icons.bug_report_rounded,
+                                  size: iconSize,
+                                  color: primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: Text(
+                            state.userDataModels[index].name,
+                            textAlign: TextAlign.start,
+                            style: largeText.copyWith(
+                              color: onSurface,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             );
           }

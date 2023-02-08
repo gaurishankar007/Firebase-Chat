@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
-class Chat {
+class Chat extends Equatable {
   final String fromId;
   final String toId;
   final String fromName;
@@ -11,7 +12,7 @@ class Chat {
   final Timestamp lastTime;
   final int msgNum;
 
-  Chat({
+  const Chat({
     required this.fromId,
     required this.toId,
     required this.fromName,
@@ -22,4 +23,15 @@ class Chat {
     required this.lastTime,
     required this.msgNum,
   });
+
+  @override
+  List<Object?> get props => [
+        fromId,
+        toId,
+        fromName,
+        fromAvatar,
+        toAvatar,
+        lastMsg,
+        lastTime,
+      ];
 }

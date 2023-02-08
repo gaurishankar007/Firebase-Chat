@@ -17,6 +17,7 @@ Widget messageContent({
 }) {
   Color primary = Theme.of(context).colorScheme.primary;
   Color primaryContainer = Theme.of(context).colorScheme.primaryContainer;
+  Color surface = Theme.of(context).colorScheme.surface;
 
   return Row(
     mainAxisAlignment: side == MessageSide.right
@@ -46,7 +47,36 @@ Widget messageContent({
         )
       else
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                backgroundColor: surface,
+                titlePadding: EdgeInsets.zero,
+                content: ClipRRect(
+                  borderRadius: BorderRadius.circular(cBorderRadius * 2),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: messageModel.content,
+                    placeholder: (context, url) => Container(
+                      height: sWidth(context) * .4,
+                      width: sWidth(context) * .4,
+                      color: surface,
+                      child: SpinKitCircle(
+                        color: Colors.white,
+                        size: iconSize,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.bug_report_rounded,
+                      size: iconSize,
+                      color: primary,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
           child: Container(
             constraints:
                 BoxConstraints(maxWidth: sWidth(context) * .7, maxHeight: 200),

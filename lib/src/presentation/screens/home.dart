@@ -45,7 +45,7 @@ class _HomeState extends State<Home> {
         body: PageView(
           controller: pageController,
           physics: NeverScrollableScrollPhysics(),
-          children: const [
+          children: [
             ChatList(),
             Search(),
             Profile(),

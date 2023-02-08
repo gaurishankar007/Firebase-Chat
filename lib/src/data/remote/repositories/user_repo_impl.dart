@@ -5,6 +5,7 @@ import 'package:firebase_chat/src/core/resources/data_state.dart';
 import 'package:firebase_chat/src/data/local/local_data.dart';
 import 'package:firebase_chat/src/data/remote/models/user_model.dart';
 import 'package:firebase_chat/src/domain/repositories/user_repo.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseUserRepoImpl extends FirebaseUserRepo {
   final _database = FirebaseFirestore.instance;
@@ -58,6 +59,23 @@ class FirebaseUserRepoImpl extends FirebaseUserRepo {
       return ServerTimeOut();
     } catch (e) {
       return DataFailed(error: e.toString());
+    }
+  }
+
+  Future<void> getFcmToken() async {
+    final String? fcmToken = await FirebaseMessaging.instance.getToken();
+    if (fcmToken != null) {
+      final user = await _database
+          .collection("user")
+          .where("id", isEqualTo: token)
+          .get();
+
+      if (user.docs.isEmpty) return;
+      final String userId = user.docs.first.id;
+      await _database
+          .collection("users")
+          .doc(userId)
+          .update({"fcmToken": fcmToken});
     }
   }
 }

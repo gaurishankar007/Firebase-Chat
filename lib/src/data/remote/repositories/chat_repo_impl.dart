@@ -21,45 +21,6 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
   final GoogleUserModel googleUserModel = LocalData.googleUserModel!;
 
   @override
-  Future<DataState<List<ChatModel>>> chatList() async {
-    try {
-      final fromChat = await _database
-          .collection("chat")
-          .withConverter(
-            fromFirestore: ChatModel.fromFirestore,
-            toFirestore: (ChatModel messageModel, options) =>
-                messageModel.toFirestore(),
-          )
-          .where("fromId", isEqualTo: googleUserModel.accessToken)
-          .get();
-
-      final toChat = await _database
-          .collection("chat")
-          .withConverter(
-            fromFirestore: ChatModel.fromFirestore,
-            toFirestore: (ChatModel messageModel, options) =>
-                messageModel.toFirestore(),
-          )
-          .where("toId", isEqualTo: googleUserModel.accessToken)
-          .get();
-
-      List<ChatModel> chatModels = [];
-      if (fromChat.docs.isNotEmpty) {
-        chatModels.addAll(fromChat.docs.map((doc) => doc.data()).toList());
-      }
-      if (toChat.docs.isNotEmpty) {
-        chatModels.addAll(toChat.docs.map((doc) => doc.data()).toList());
-      }
-
-      return DataSuccess(data: chatModels);
-    } on SocketException {
-      return ServerTimeOut();
-    } catch (error) {
-      return DataFailed(error: error.toString());
-    }
-  }
-
-  @override
   Future<void> viewChat(
       {required UserDataModel userDataModel,
       required BuildContext context}) async {

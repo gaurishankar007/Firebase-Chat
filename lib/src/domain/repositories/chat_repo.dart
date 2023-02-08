@@ -1,14 +1,11 @@
 import 'dart:io';
 
 import 'package:firebase_chat/src/core/resources/data_state.dart';
-import 'package:firebase_chat/src/data/remote/models/chat_model.dart';
 import 'package:firebase_chat/src/data/remote/models/message_model.dart';
 import 'package:firebase_chat/src/data/remote/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class FirebaseChatRepo {
-  Future<DataState<List<ChatModel>>>? chatList();
-
   Future<void> viewChat({
     required UserDataModel userDataModel,
     required BuildContext context,

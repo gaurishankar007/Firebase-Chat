@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat/src/domain/entities/chat_entity.dart';
 
 class ChatModel extends Chat {
-  ChatModel({
+  const ChatModel({
     required String fromId,
     required String toId,
     required String fromName,

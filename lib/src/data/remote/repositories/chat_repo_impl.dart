@@ -27,7 +27,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
     final fromChat = await _database
         .collection("chat")
         .withConverter(
-          fromFirestore: ChatModel.fromFirestore,
+          fromFirestore: ChatModel.fromFireStore,
           toFirestore: (ChatModel messageModel, options) =>
               messageModel.toFirestore(),
         )
@@ -38,7 +38,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
     final toChat = await _database
         .collection("chat")
         .withConverter(
-          fromFirestore: ChatModel.fromFirestore,
+          fromFirestore: ChatModel.fromFireStore,
           toFirestore: (ChatModel messageModel, options) =>
               messageModel.toFirestore(),
         )
@@ -62,7 +62,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
       final newMessage = await _database
           .collection("chat")
           .withConverter(
-            fromFirestore: ChatModel.fromFirestore,
+            fromFirestore: ChatModel.fromFireStore,
             toFirestore: (ChatModel messageModel, options) =>
                 messageModel.toFirestore(),
           )
@@ -113,7 +113,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
           .doc(chatId)
           .collection("message")
           .withConverter(
-            fromFirestore: MessageModel.fromFirestore,
+            fromFirestore: MessageModel.fromFireStore,
             toFirestore: (MessageModel messageModel, options) =>
                 messageModel.toFirestore(),
           )
@@ -160,7 +160,7 @@ class FirebaseChatRepoImpl extends FirebaseChatRepo {
           .doc(chatId)
           .collection("message")
           .withConverter(
-            fromFirestore: MessageModel.fromFirestore,
+            fromFirestore: MessageModel.fromFireStore,
             toFirestore: (MessageModel messageModel, options) =>
                 messageModel.toFirestore(),
           )

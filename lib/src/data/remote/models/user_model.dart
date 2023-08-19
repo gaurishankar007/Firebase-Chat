@@ -20,7 +20,7 @@ class UserDataModel extends UserData {
           createdAt: createdAt,
         );
 
-  factory UserDataModel.fromFirestore(
+  factory UserDataModel.fromFireStore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {

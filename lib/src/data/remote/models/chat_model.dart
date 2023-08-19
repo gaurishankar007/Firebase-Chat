@@ -24,7 +24,7 @@ class ChatModel extends Chat {
           msgNum: msgNum,
         );
 
-  factory ChatModel.fromFirestore(
+  factory ChatModel.fromFireStore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {

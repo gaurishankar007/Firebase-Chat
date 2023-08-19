@@ -36,7 +36,7 @@ class ChatMessageBloc extends Bloc<ChatMessageEvent, ChatMessageState> {
         .doc(event.chatId)
         .collection("message")
         .withConverter(
-          fromFirestore: MessageModel.fromFirestore,
+          fromFirestore: MessageModel.fromFireStore,
           toFirestore: (MessageModel messageModel, options) =>
               messageModel.toFirestore(),
         )

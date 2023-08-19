@@ -1,4 +1,5 @@
 import 'package:firebase_chat/src/presentation/screens/chat_list.dart';
+import 'package:firebase_chat/src/presentation/screens/google_map.dart';
 import 'package:firebase_chat/src/presentation/screens/profile.dart';
 import 'package:firebase_chat/src/presentation/screens/search.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
           children: [
             ChatList(),
             Search(),
+            GMap(),
             Profile(),
           ],
         ),
@@ -62,6 +64,10 @@ class _HomeState extends State<Home> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.search_rounded),
                 label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.location_on_rounded),
+                label: 'Map',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_rounded),

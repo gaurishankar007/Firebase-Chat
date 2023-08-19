@@ -18,7 +18,7 @@ class FirebaseUserRepoImpl extends FirebaseUserRepo {
           .collection("users")
           .where("id", isNotEqualTo: token)
           .withConverter(
-            fromFirestore: UserDataModel.fromFirestore,
+            fromFirestore: UserDataModel.fromFireStore,
             toFirestore: (UserDataModel userData, options) =>
                 userData.toFirestore(),
           )
@@ -39,7 +39,7 @@ class FirebaseUserRepoImpl extends FirebaseUserRepo {
           .collection("users")
           .where("name", isEqualTo: name)
           .withConverter(
-            fromFirestore: UserDataModel.fromFirestore,
+            fromFirestore: UserDataModel.fromFireStore,
             toFirestore: (UserDataModel userData, options) =>
                 userData.toFirestore(),
           )

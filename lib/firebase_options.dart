@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -45,17 +48,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyAfjr-aDw_zVDV7Hc-iFiWe6EEeXY2j_g4',
-    appId: '1:443164608873:web:0eec6607b9dcdb98d395f8',
+    appId: '1:443164608873:web:d362437c40d71013d395f8',
     messagingSenderId: '443164608873',
     projectId: 'fir-chat-b2405',
     authDomain: 'fir-chat-b2405.firebaseapp.com',
     storageBucket: 'fir-chat-b2405.appspot.com',
-    measurementId: 'G-Z7N6BG0H16',
+    measurementId: 'G-53DJDLKPC3',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAgSHtVjps0_86MFvoiKZAvHa-sDV9kuUU',
-    appId: '1:443164608873:android:a546b8023a10757ad395f8',
+    appId: '1:443164608873:android:075c480321641537d395f8',
     messagingSenderId: '443164608873',
     projectId: 'fir-chat-b2405',
     storageBucket: 'fir-chat-b2405.appspot.com',
@@ -63,20 +66,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAoi-jDXBj10qD3Vgs3ROr6pkt8VCRy2Io',
-    appId: '1:443164608873:ios:79d5d9ec1ee729e2d395f8',
+    appId: '1:443164608873:ios:c538eee44b77234cd395f8',
     messagingSenderId: '443164608873',
     projectId: 'fir-chat-b2405',
     storageBucket: 'fir-chat-b2405.appspot.com',
-    iosClientId: '443164608873-e6fnq2ae21g1h0vfjr6fch01m38jtk3h.apps.googleusercontent.com',
-    iosBundleId: 'com.example.firebaseChat',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAoi-jDXBj10qD3Vgs3ROr6pkt8VCRy2Io',
-    appId: '1:443164608873:ios:79d5d9ec1ee729e2d395f8',
-    messagingSenderId: '443164608873',
-    projectId: 'fir-chat-b2405',
-    storageBucket: 'fir-chat-b2405.appspot.com',
+    androidClientId: '443164608873-ph9otl70kbtu4qcje5548i19cdf5car7.apps.googleusercontent.com',
     iosClientId: '443164608873-e6fnq2ae21g1h0vfjr6fch01m38jtk3h.apps.googleusercontent.com',
     iosBundleId: 'com.example.firebaseChat',
   );

@@ -14,7 +14,7 @@ class MessageModel extends Message {
           createdAt: createdAt,
         );
 
-  factory MessageModel.fromFirestore(
+  factory MessageModel.fromFireStore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     SnapshotOptions? options,
   ) {

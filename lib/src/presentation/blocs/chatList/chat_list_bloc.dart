@@ -12,7 +12,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final fromChat = FirebaseFirestore.instance
       .collection("chat")
       .withConverter(
-        fromFirestore: ChatModel.fromFirestore,
+        fromFirestore: ChatModel.fromFireStore,
         toFirestore: (ChatModel messageModel, options) =>
             messageModel.toFirestore(),
       )
@@ -23,7 +23,7 @@ class ChatListBloc extends Bloc<ChatListEvent, ChatListState> {
   final toChat = FirebaseFirestore.instance
       .collection("chat")
       .withConverter(
-        fromFirestore: ChatModel.fromFirestore,
+        fromFirestore: ChatModel.fromFireStore,
         toFirestore: (ChatModel messageModel, options) =>
             messageModel.toFirestore(),
       )

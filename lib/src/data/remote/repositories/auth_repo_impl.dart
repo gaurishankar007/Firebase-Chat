@@ -48,7 +48,7 @@ class AuthRepo implements FirebaseAuthRepo {
         final userData = await _database
             .collection("users")
             .withConverter(
-              fromFirestore: UserDataModel.fromFirestore,
+              fromFirestore: UserDataModel.fromFireStore,
               toFirestore: (UserDataModel userData, options) =>
                   userData.toFirestore(),
             )
@@ -69,7 +69,7 @@ class AuthRepo implements FirebaseAuthRepo {
           await _database
               .collection("users")
               .withConverter(
-                fromFirestore: UserDataModel.fromFirestore,
+                fromFirestore: UserDataModel.fromFireStore,
                 toFirestore: (UserDataModel userData, options) =>
                     userData.toFirestore(),
               )

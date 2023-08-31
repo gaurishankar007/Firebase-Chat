@@ -4,6 +4,7 @@ import 'package:firebase_chat/src/core/extensions/build_context_extension.dart';
 import 'package:firebase_chat/src/data/remote/repositories/google_map_repo_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -51,6 +52,8 @@ class _GMapState extends State<GMap> {
     )
   ];
 
+  List<LatLng> polyLineCoordinates = [];
+
   addCustomMarker() async {
     final icon = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
@@ -76,6 +79,22 @@ class _GMapState extends State<GMap> {
     return await Geolocator.getCurrentPosition();
   }
 
+  void getPolyLine() async {
+    PolylinePoints polyLinePoints = PolylinePoints();
+
+    final res = await polyLinePoints.getRouteBetweenCoordinates(
+      "AIzaSyAgSHtVjps0_86MFvoiKZAvHa-sDV9kuUU",
+      PointLatLng(27.6588, 85.3247),
+      PointLatLng(27.6710, 85.4298),
+    );
+
+    if (res.points.isNotEmpty) {
+      res.points.forEach((element) {
+        polyLineCoordinates.add(LatLng(element.latitude, element.longitude));
+      });
+    }
+  }
+
   changeMapTheme(String path) async {
     GoogleMapController ctr = await completer.future;
     if (context.mounted) {
@@ -90,6 +109,7 @@ class _GMapState extends State<GMap> {
   void initState() {
     super.initState();
     addCustomMarker();
+    getPolyLine();
   }
 
   @override
@@ -114,6 +134,12 @@ class _GMapState extends State<GMap> {
                     },
                     markers: Set<Marker>.of(markers),
                     polygons: Set<Polygon>.of(polygons),
+                    polylines: {
+                      Polyline(
+                        polylineId: PolylineId("route"),
+                        points: polyLineCoordinates,
+                      ),
+                    },
                     zoomControlsEnabled: false,
                   ),
                 ),
@@ -124,6 +150,7 @@ class _GMapState extends State<GMap> {
                       Container(
                         height: 60,
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
@@ -133,46 +160,55 @@ class _GMapState extends State<GMap> {
                             )
                           ],
                         ),
-                        child: TextFormField(
-                          controller: txtC,
-                          onChanged: (value) async {
-                            if (value.isEmpty) {
-                              setState(() {
-                                searching = false;
-                              });
-                              return;
-                            }
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: TextFormField(
+                                controller: txtC,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  suffixIcon: searching
+                                      ? IconButton(
+                                          onPressed: () {
+                                            txtC.clear();
+                                            setState(() {
+                                              searching = false;
+                                            });
+                                          },
+                                          icon: Icon(Icons.clear_rounded),
+                                        )
+                                      : null,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                if (txtC.text.isEmpty) {
+                                  setState(() {
+                                    searching = false;
+                                  });
+                                  return;
+                                }
 
-                            places = await GoogleMapRepoImpl().getPlaces(value);
-                            if (!searching) {
-                              searching = true;
-                            }
-                            setState(() {});
-                          },
-                          decoration: InputDecoration(
-                            isDense: true,
-                            filled: true,
-                            fillColor: Colors.white,
-                            suffixIcon: searching
-                                ? IconButton(
-                                    onPressed: () {
-                                      txtC.clear();
-                                      setState(() {
-                                        searching = false;
-                                      });
-                                    },
-                                    icon: Icon(Icons.clear_rounded),
-                                  )
-                                : null,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
+                                await GoogleMapRepoImpl().getPlaces(txtC.text);
+                                // if (!searching) {
+                                //   searching = true;
+                                // }
+                                // setState(() {});
+                              },
+                              icon: Icon(Icons.search),
+                            )
+                          ],
                         ),
                       ),
                       if (searching)
